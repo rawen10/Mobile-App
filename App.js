@@ -22,7 +22,7 @@ import Profile from "./src/screens/Profile";
 export default function App() {
   const Tab = createBottomTabNavigator();
   const AuthStack = createStackNavigator();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(false);
 
   return (
     <PaperProvider>
@@ -50,7 +50,6 @@ export default function App() {
                       name="user"
                       size={24}
                       color={color}
-                      initialParams={{ setUser }}
                     />
                   ),
                 }}
@@ -61,7 +60,7 @@ export default function App() {
               <AuthStack.Screen
                 name="Login"
                 component={Login}
-                initialParams={{ setUser }}
+                // initialParams={{ setUser }}
               />
               <AuthStack.Screen name="Sign Up" component={SignUp} />
             </AuthStack.Navigator>
@@ -74,6 +73,7 @@ export default function App() {
 
 function HomeStackNavigator() {
   const HomeStack = createStackNavigator();
+  // const {setUser}=route.params ;
   return (
     <HomeStack.Navigator initialRouteName="Home">
       <HomeStack.Screen name="Home" component={Home} />

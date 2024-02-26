@@ -1,41 +1,63 @@
 import { View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView } from "native-base";
 import { Avatar, Button, Card, Text } from "react-native-paper";
-import {items} from '../data'
-import { useNavigation } from '@react-navigation/native';
+import { items } from "../data";
+import { useNavigation } from "@react-navigation/native";
+import SearchBar from "./SearchBar";
+
 
 export default function Products() {
-  const navigation = useNavigation()
-  return (
-    <ScrollView >
-      <View style={{gap:20}}>
-{items.map((elem,index)=>  {
-return(
-        <Card key={index}>
-          <Card.Title
-            title="Product"
-            subtitle="MSI Gaming Laptop"
-            // left={LeftContent}
-          />
-          <Card.Cover
-            source={{
-              uri: elem.imageURL,
-            }}
-           width={50}
-            style={{objectFit: 'contain'}}
-          />
-          <Card.Content>
-            <Text variant="titleLarge">{elem.productName} </Text>
-            <Text variant="bodyMedium">17,3" FHD - NVIDIA® GeF</Text>
-          </Card.Content>
+  const navigation = useNavigation();
 
-          <Card.Actions>
-            <Button>Cancel</Button>
-            <Button onPress={()=>navigation.navigate('Details',{item:elem})}>See details</Button>
-          </Card.Actions>
-        </Card>
-)})}
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Filtering logic based on search query
+  const filteredItems = items.filter(item =>
+    item.productName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <ScrollView>
+    <SearchBar  onSearch={setSearchQuery}/>
+      <View style={{ gap: 20 , marginTop:20}}>
+        {items.map((elem, index) => {
+          return (
+            <Card key={index}>
+              <Card.Title
+                titleStyle={{ color: "red", fontSize: 25 }} // Set title color to red and font size to 20
+                title={elem.productName}
+                subtitle={elem.shortDescription}
+                // left={LeftContent}
+              />
+              <Card.Cover
+                source={{
+                  uri: elem.imageURL,
+                }}
+                style={{ resizeMode: "contain" }}
+              />
+
+              <Card.Content>
+                <Text
+                  variant="titleLarge"
+                  style={{ color: "green", fontSize: 27 }}
+                >
+                  {elem.price}
+                </Text>
+                <Text variant="bodyMedium">{elem.longDescription}</Text>
+              </Card.Content>
+
+              <Card.Actions>
+                <Button>Cancel</Button>
+                <Button
+                  onPress={() => navigation.navigate("Details", { item: elem })}
+                >
+                  See details
+                </Button>
+              </Card.Actions>
+            </Card>
+          );
+        })}
       </View>
     </ScrollView>
   );

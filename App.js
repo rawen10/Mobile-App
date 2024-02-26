@@ -1,6 +1,8 @@
+import React, { useState } from "react";
 import {
   ImageBackground,
   SafeAreaView,
+  Settings,
   StyleSheet,
   Text,
   View,
@@ -15,14 +17,22 @@ import { PaperProvider } from "react-native-paper";
 import ProductDetails from "./src/screens/ProductDetails";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import auth from "./src/firebase";
 import Profile from "./src/screens/Profile";
+import Setting from "./src/screens/Setting";
 
 export default function App() {
   const Tab = createBottomTabNavigator();
   const AuthStack = createStackNavigator();
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState(null); // Initialize user state
+
+  // Listen for authentication state changes
+  onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser); // Update user state
+  });
 
   return (
     <PaperProvider>
@@ -32,7 +42,7 @@ export default function App() {
             <Tab.Navigator>
               <Tab.Screen
                 name="HomeStack"
-                component={HomeStackNavigator} //car fama navigation de type stack bich tssir. ken n7ot home bark y aura pas une navigation pour detail//
+                component={HomeStackNavigator}
                 options={{
                   tabBarLabel: "Home",
                   tabBarIcon: ({ color, size }) => (
@@ -46,22 +56,25 @@ export default function App() {
                 options={{
                   tabBarLabel: "Profile",
                   tabBarIcon: ({ color, size }) => (
-                    <Entypo
-                      name="user"
-                      size={24}
-                      color={color}
-                    />
+                    <Entypo name="user" size={24} color={color} />
                   ),
                 }}
               />
+              <Tab.Screen
+                name="Setting"
+                component={Setting}
+                options={{
+                  tabBarLabel: "Settings",
+                  tabBarIcon: ({ color, size }) => (
+                    <MaterialIcons name="settings" size={24} color="black" />
+                  ),
+                }}
+              >
+              </Tab.Screen>
             </Tab.Navigator>
           ) : (
-            <AuthStack.Navigator >
-              <AuthStack.Screen
-                name="Login"
-                component={Login}
-                // initialParams={{ setUser }}
-              />
+            <AuthStack.Navigator>
+              <AuthStack.Screen name="Login" component={Login} />
               <AuthStack.Screen name="Sign Up" component={SignUp} />
             </AuthStack.Navigator>
           )}
@@ -73,7 +86,6 @@ export default function App() {
 
 function HomeStackNavigator() {
   const HomeStack = createStackNavigator();
-  // const {setUser}=route.params ;
   return (
     <HomeStack.Navigator initialRouteName="Home">
       <HomeStack.Screen name="Home" component={Home} />

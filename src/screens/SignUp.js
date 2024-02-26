@@ -10,14 +10,14 @@ import {
   Center,
   NativeBaseProvider,
 } from "native-base";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-// import auth from "../firebase";
+import { createUserWithEmailAndPassword} from "firebase/auth";
+import auth from "../firebase";
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const auth = getAuth();
+  // const auth = getAuth();
 
 
   const handleSignUp = () => {
@@ -39,7 +39,8 @@ export default function SignUp() {
         // ..
       });
   };
-console.log(password,email)
+console.log(password,email,confirmPassword)
+
   return (
     <Center w="100%">
       <Box safeArea p="2" w="90%" maxW="290" py="8">
@@ -96,7 +97,7 @@ console.log(password,email)
             <Input
               type="password"
               placeholder=" confirm  your password"
-              onChange={(value) => setConfirmPassword(value)}
+              onChangeText={setConfirmPassword}
               value={confirmPassword}
             />
           </FormControl>

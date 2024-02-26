@@ -12,9 +12,11 @@ import {
   Center,
   NativeBaseProvider,
 } from "native-base";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import auth from "../firebase";
 
-const auth = getAuth();
+
+// const auth = getAuth();
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
